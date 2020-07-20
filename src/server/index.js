@@ -15,11 +15,11 @@ app.use(bodyParser.json());
 // Cors for cross origin allowance
 app.use(cors());
 // Initialize the main project folder
-app.use(express.static('website'));
+app.use(express.static('dist'));
 
 
 // Setup Server
-const port = 3363;
+const port = 8000;
 
 const server = app.listen(port, () => { console.log(`The server is running on port number: ${port}`) });
 

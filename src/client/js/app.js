@@ -1,3 +1,6 @@
+
+export const app = () => {
+
 /* Global Variables */
 // base URL for openWeatherMap API
 const baseURL = 'http://api.openweathermap.org/data/2.5/weather?zip=';
@@ -87,3 +90,4 @@ const generateListener = () => {
 const generate = document.getElementById('generate');
 generate.addEventListener('click', generateListener);
 
+}
