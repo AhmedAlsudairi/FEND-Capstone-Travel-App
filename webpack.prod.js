@@ -11,10 +11,10 @@ module.exports = {
     optimization: {
         minimizer: [new TerserPlugin({}), new OptimizeCSSAssetsPlugin({})],
     },
-    output: {
-        libraryTarget: 'var',
-        library: 'Client'
-    },
+    // output: {
+    //     libraryTarget: 'var',
+    //     library: 'Client'
+    // },
     module: {
         rules: [
             {

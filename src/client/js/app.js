@@ -1,6 +1,4 @@
 
-export const app = () => {
-
 /* Global Variables */
 // base URL for openWeatherMap API
 const baseURL = 'http://api.openweathermap.org/data/2.5/weather?zip=';
@@ -12,7 +10,7 @@ let d = new Date();
 let newDate = d.getMonth() + '.' + d.getDate() + '.' + d.getFullYear();
 
 // GET request to openWeatherMap
-const getData = async (url) => {
+export const getData = async (url) => {
 
     const request = await fetch(url);
 
@@ -25,7 +23,7 @@ const getData = async (url) => {
 }
 
 // POST wheather data to server side (server.js) 
-const postData = async (url = '', data = {}) => {
+export const postData = async (url = '', data = {}) => {
 
     const response = await fetch(url, {
         method: 'POST',
@@ -46,7 +44,7 @@ const postData = async (url = '', data = {}) => {
 }
 
 // update user interface acording to weather data stored in server side (server.js)
-const updateUI = async () => {
+export const updateUI = async () => {
 
     const request = await fetch('/add');
 
@@ -66,7 +64,7 @@ const updateUI = async () => {
 }
 
 // get zipcode and feeling from the user, then send GET request to openWeatherMap, then POST the data to server side (server.js), and then update the user interface
-const generateListener = () => {
+export const generateListener = () => {
     const zipCode = document.getElementById('zip').value;
     const url = baseURL + zipCode + apiKey;
 
@@ -84,10 +82,4 @@ const generateListener = () => {
         }).then(() => {
             updateUI();
         });
-}
-
-//click listener to execute getData function
-const generate = document.getElementById('generate');
-generate.addEventListener('click', Client.generateListener);
-
 }
