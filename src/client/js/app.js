@@ -88,6 +88,6 @@ const generateListener = () => {
 
 //click listener to execute getData function
 const generate = document.getElementById('generate');
-generate.addEventListener('click', generateListener);
+generate.addEventListener('click', Client.generateListener);
 
 }
