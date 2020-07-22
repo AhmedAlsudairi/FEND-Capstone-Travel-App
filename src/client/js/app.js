@@ -1,9 +1,9 @@
 
 /* Global Variables */
 // base URL for openWeatherMap API
-const baseURL = 'http://api.openweathermap.org/data/2.5/weather?zip=';
+const baseURL = 'http://api.geonames.org/searchJSON?q=';
 // API personal key for openWeatherMap
-const apiKey = '&appid=0ebcaa3a3d5701a1006c148ae6505f48';
+const apiKey = '&username=a7mad1199';
 
 // Create a new date instance dynamically with JS
 let d = new Date();
@@ -16,6 +16,7 @@ export const getData = async (url) => {
 
     try {
         const newData = await request.json();
+        console.log(newData);
         return newData;
     } catch (error) {
         console.log(error);
@@ -46,7 +47,7 @@ export const postData = async (url = '', data = {}) => {
 // update user interface acording to weather data stored in server side (server.js)
 export const updateUI = async () => {
 
-    const request = await fetch('/add');
+    const request = await fetch('http://localhost:8000/add');
 
     try {
         const newData = await request.json();
@@ -65,8 +66,8 @@ export const updateUI = async () => {
 
 // get zipcode and feeling from the user, then send GET request to openWeatherMap, then POST the data to server side (server.js), and then update the user interface
 export const generateListener = () => {
-    const zipCode = document.getElementById('zip').value;
-    const url = baseURL + zipCode + apiKey;
+    const city = document.getElementById('city').value;
+    const url = baseURL + city + apiKey;
 
     getData(url)
         .then((data) => {
@@ -78,7 +79,7 @@ export const generateListener = () => {
                 date: newDate,
                 userResponse: userResponse
             }
-            postData('/add', wheatherData);
+            postData('http://localhost:8000/add', wheatherData);
         }).then(() => {
             updateUI();
         });
