@@ -1,6 +1,6 @@
 // Setup empty JS object to act as endpoint for all routes
-let projectData = {};
-
+let geoData = {};
+let wheatherData = {};
 // Require Express to run server and routes
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -23,21 +23,33 @@ const port = 8000;
 
 const server = app.listen(port, () => { console.log(`The server is running on port number: ${port}`) });
 
-//GET route
-app.get('/add', (req, res) => {
-    res.send(projectData);
+//GET route for geonames data
+app.get('/geo', (req, res) => {
+    res.send(geoData);
 });
 
 //POST route
-app.post('/add', (req, res) => {
+app.post('/geo', (req, res) => {
     const newData = req.body;
     const newEntry = {
-        temperature: newData.temperature,
-        date: newData.date,
-        userResponse: newData.userResponse
+        country: newData.country,
+        longitude: newData.longitude,
+        latitude: newData.latitude
     }
-    projectData = { ...newEntry };
+    geoData = { ...newEntry };
 
+});
+
+//GET route for wheatherbit data
+app.get('/wheather', (req, res) => {
+    
+    res.send(wheatherData);
+});
+
+//POST route for wheatherbit data
+app.post('/wheather', (req, res) => {
+    const newData = req.body;
+    wheatherData = { ...newData };
 });
 
 

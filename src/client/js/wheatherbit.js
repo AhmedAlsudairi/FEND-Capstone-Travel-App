@@ -1,13 +1,9 @@
 
 /* Global Variables */
 // base URL for openWeatherMap API
-const baseURL = 'http://api.geonames.org/searchJSON?q=';
+const baseURL = 'http://api.weatherbit.io/v2.0/';
 // API personal key for openWeatherMap
-const apiKey = '&username=a7mad1199';
-
-// Create a new date instance dynamically with JS
-let d = new Date();
-let newDate = d.getMonth() + '.' + d.getDate() + '.' + d.getFullYear();
+const apiKey = '&62c2c4c4249a47cb9b82e42911703c22';
 
 // GET request to openWeatherMap
 export const getData = async (url) => {
@@ -16,7 +12,6 @@ export const getData = async (url) => {
 
     try {
         const newData = await request.json();
-        console.log(newData);
         return newData;
     } catch (error) {
         console.log(error);
@@ -25,7 +20,6 @@ export const getData = async (url) => {
 
 // POST wheather data to server side (server.js) 
 export const postData = async (url = '', data = {}) => {
-
     const response = await fetch(url, {
         method: 'POST',
         credentials: 'same-origin',
@@ -47,17 +41,17 @@ export const postData = async (url = '', data = {}) => {
 // update user interface acording to weather data stored in server side (server.js)
 export const updateUI = async () => {
 
-    const request = await fetch('http://localhost:8000/add');
+    const request = await fetch('http://localhost:8000/wheather');
 
     try {
         const newData = await request.json();
-        const date = document.getElementById('date');
+        const date = document.getElementById('country');
         const temp = document.getElementById('temp');
         const content = document.getElementById('content');
-
-        date.innerHTML = 'Date: ' + newData.date;
-        temp.innerHTML = 'Temperature: ' + newData.temperature;
-        content.innerHTML = 'Feeling: ' + newData.userResponse;
+        
+        date.innerHTML = 'country: ' + newData.country;
+        temp.innerHTML = 'longitude: ' + newData.longitude;
+        content.innerHTML = 'latitude: ' + newData.latitude;
     } catch (error) {
         console.log(error);
 
@@ -71,16 +65,23 @@ export const generateListener = () => {
 
     getData(url)
         .then((data) => {
-            const temperature = data.main.temp;
-            const userResponse = document.getElementById('feelings').value;
+            const response = data.geonames[0];
+            const country = response.countryName;
+            const longitude = response.lng;
+            const latitude = response.lat;
+            
 
-            const wheatherData = {
-                temperature: temperature,
-                date: newDate,
-                userResponse: userResponse
+            const geonamesData = {
+                country: country,
+                longitude: longitude,
+                latitude: latitude
             }
-            postData('http://localhost:8000/add', wheatherData);
+            postData('http://localhost:8000/wheather', geonamesData);
         }).then(() => {
             updateUI();
         });
+}
+
+export const countdown = () => {
+    const date = document.getElementById('date').value;
 }
