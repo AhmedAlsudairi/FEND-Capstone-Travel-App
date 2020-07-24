@@ -1,6 +1,6 @@
 // Setup empty JS object to act as endpoint for all routes
 let geoData = {};
-let wheatherData = {};
+let weatherData = {};
 // Require Express to run server and routes
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -40,16 +40,16 @@ app.post('/geo', (req, res) => {
 
 });
 
-//GET route for wheatherbit data
-app.get('/wheather', (req, res) => {
+//GET route for weatherbit data
+app.get('/weather', (req, res) => {
     
-    res.send(wheatherData);
+    res.send(weatherData);
 });
 
-//POST route for wheatherbit data
-app.post('/wheather', (req, res) => {
+//POST route for weatherbit data
+app.post('/weather', (req, res) => {
     const newData = req.body;
-    wheatherData = { ...newData };
+    weatherData = { ...newData , length: 16};
 });
 
 

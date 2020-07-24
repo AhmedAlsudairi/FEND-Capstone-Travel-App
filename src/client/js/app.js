@@ -4,8 +4,11 @@
 const geonamesURL = 'http://api.geonames.org/searchJSON?q=';
 const geonamesKey = '&username=a7mad1199';
 
-const wheatherbitURL = 'https://api.weatherbit.io/v2.0/forecast/daily';
-const wheatherbitKey = '&key=62c2c4c4249a47cb9b82e42911703c22';
+const weatherbitURL = 'https://api.weatherbit.io/v2.0/forecast/daily';
+const weatherbitKey = '&key=62c2c4c4249a47cb9b82e42911703c22';
+
+const pixabayURL = 'https://pixabay.com/api/?&image_type=photo&q=';
+const pixabayKey = '&key=17634723-f4b33149baa42378817312beb';
 // GET request to geonames
 export const getFromGeonames = async (url) => { //
 
@@ -79,8 +82,8 @@ export const generateListener = () => { //
                  goeData = await getData('http://localhost:8000/geo');
                  getFromWeatherbit(goeData)
                  .then((whethData)=>{
-                     const wheatherbitData = whethData.data;
-                     postData('http://localhost:8000/wheather',wheatherbitData);
+                     const weatherbitData = whethData.data;
+                     postData('http://localhost:8000/weather',weatherbitData);
                      updateUI();
                  });
               })();
@@ -91,7 +94,7 @@ export const getFromWeatherbit = async (geoData) => { //
      const lat = geoData.latitude;
      const lng = geoData.longitude;
 
-     const request = await fetch(wheatherbitURL+`?&lat=${lat}&lon=${lng}`+wheatherbitKey);
+     const request = await fetch(weatherbitURL+`?&lat=${lat}&lon=${lng}`+weatherbitKey);
      try{
          const newData = await request.json();
          return newData;
@@ -121,8 +124,21 @@ export const getCountdown = () => { //
 }
 
 export const updateUI = async () => {
-    getData('http://localhost:8000/wheather')
+    getData('http://localhost:8000/weather')
     .then((data)=>{
+        const userDate = document.getElementById('date').value;
+//compare between dates (transfer them to miliseconds)
+        let a = new Date(userDate).getTime();
         console.log(data);
+        for (let i = 0; i < data.length; i++) {
+            let b= new Date(data[i].datetime).getTime();
+            if (b >= a) {
+                console.log(data[i]);
+                document.getElementById('temp').innerHTML='temp: '+data[i].temp;
+              break;
+            }
+          }
     })
 }
+
+
