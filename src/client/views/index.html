@@ -18,7 +18,10 @@
     </div>
     <div class="holder feel">
         <label for="date">Enter Date here</label>
-        <input type="date" id="date" placeholder="enter date here">
+        <input type="date" id="date" placeholder="enter start date here">
+        <br>
+        <input type="date" id="endDate" placeholder="enter end date here">
+        <br>
       <button id="generate" type="submit"> Generate </button>
     </div>
     <div class="holder entry" id="entryHolder">
@@ -27,10 +30,10 @@
         <div id="city"></div>
         <div id="temp"></div>
         <div id="content"></div>
+        <div id="duration"></div>
       </div>
     </div>
   </div>
-
   <script>
     // Check that service workers are supported
     if ('serviceWorker' in navigator) {

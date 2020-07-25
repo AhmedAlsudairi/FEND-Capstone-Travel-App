@@ -61,6 +61,10 @@ export const getData = async (url) => { //
 export const generateListener = () => { //
     const city = document.getElementById('city').value;
     const geoURL = geonamesURL + city + geonamesKey;
+    const startDate = document.getElementById('date').value;
+    const endtDate = document.getElementById('endDate').value;
+    const duration =  subtractDates(startDate,endtDate);
+    console.log(duration);
 
     getFromAPI(geoURL)
         .then((data) => {
@@ -77,6 +81,8 @@ export const generateListener = () => { //
             postData('http://localhost:8000/geo', geonamesData);
         }).then((data) => {
             const countdown = getCountdown();
+
+            
             let goeData;
             (async () => {
                  goeData = await getData('http://localhost:8000/geo');
@@ -84,7 +90,7 @@ export const generateListener = () => { //
                  .then((whethData)=>{
                      const weatherbitData = whethData.data;
                      postData('http://localhost:8000/weather',weatherbitData);
-                     updateUI();
+                     updateUI(duration);
                  });
               })();
         })
@@ -130,17 +136,13 @@ export const getCountdown = () => { //
 
     const userDate = document.getElementById('date').value;
 
-    const tripStart = Date.parse(today);
-    const tripEnd = Date.parse(userDate);
   
-    const countdown = tripEnd - tripStart;
-  
-    const daysLeft = Math.ceil(countdown / 86400000);
-    console.log(daysLeft);
+    const daysLeft = subtractDates(today,userDate);
     return daysLeft;
 }
 
-export const updateUI = async () => {
+export const updateUI = async (duration) => {
+    document.getElementById('duration').innerHTML = 'Duration of the trip: '+duration;
     getData('http://localhost:8000/weather')
     .then((data)=>{
         const userDate = document.getElementById('date').value;
@@ -159,3 +161,17 @@ export const updateUI = async () => {
 }
 
 
+export const subtractDates = (dateOne,dateTwo) => {
+    const d1 = Date.parse(dateOne);
+    const d2 = Date.parse(dateTwo);
+  
+    const difference = d2 - d1;
+  
+    const result = Math.ceil(difference / 86400000);
+    console.log(result);
+    return result;
+}
+
+export const addDurationToUI = () => {
+    
+}
