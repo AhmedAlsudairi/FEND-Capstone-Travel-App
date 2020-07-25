@@ -10,7 +10,7 @@ const weatherbitKey = '&key=62c2c4c4249a47cb9b82e42911703c22';
 const pixabayURL = 'https://pixabay.com/api/?&image_type=photo&q=';
 const pixabayKey = '&key=17634723-f4b33149baa42378817312beb';
 // GET request to geonames
-export const getFromGeonames = async (url) => { //
+export const getFromAPI = async (url) => { //
 
     const request = await fetch(url);
 
@@ -62,7 +62,7 @@ export const generateListener = () => { //
     const city = document.getElementById('city').value;
     const geoURL = geonamesURL + city + geonamesKey;
 
-    getFromGeonames(geoURL)
+    getFromAPI(geoURL)
         .then((data) => {
             const response = data.geonames[0];
             const country = response.countryName;
@@ -87,6 +87,23 @@ export const generateListener = () => { //
                      updateUI();
                  });
               })();
+        })
+        .then(()=>{
+            let cityWithoutSpace = city.split(' ');
+            cityWithoutSpace= cityWithoutSpace.join('+');
+            console.log(cityWithoutSpace);
+            
+            const url = pixabayURL+cityWithoutSpace+pixabayKey;
+            console.log(url);
+            getFromAPI(url)
+            .then((data)=>{
+                console.log(data);
+                document.getElementById('content').innerHTML = `<img src=${data.hits[0].webformatURL} alt=${city} style="width: 500px; height: 350px;">`;
+            })
+            .catch((error)=>{
+                console.log(error);
+                document.getElementById('content').innerHTML = 'no appropriate image is found';
+            })
         });
 }
 
