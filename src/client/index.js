@@ -1,11 +1,14 @@
-import {generateListener,getCountdown,getFromAPI,getFromWeatherbit,getData,updateUI,postData,subtractDates} from '../client/js/app';
+import {createTrip,getCountdown,getFromAPI,getFromWeatherbit,getData,updateUI,postData,subtractDates,removeTrip} from '../client/js/app';
 import '../client/styles/style.scss';
 //click listener to execute getData function
-const generate = document.getElementById('generate');
-generate.addEventListener('click', generateListener);
+const create = document.getElementById('create');
+create.addEventListener('click', createTrip);
+
+const remove = document.getElementById('remove');
+remove.addEventListener('click', removeTrip);
 
 export{
-    generateListener,
+    createTrip,
     getCountdown,
     getFromAPI,
     getFromWeatherbit,

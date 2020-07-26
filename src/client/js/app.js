@@ -60,7 +60,7 @@ export const getData = async (route) => { //
 }
 
 // get city from the user, then send GET request to geonames, then POST the data to server side (server.js), and then update the user interface
-export const generateListener = () => { //
+export const createTrip = () => { //
     const city = document.getElementById('city').value;
     const geoURL = geonamesURL + city + geonamesKey;
     const startDate = document.getElementById('date').value;
@@ -107,6 +107,13 @@ export const generateListener = () => { //
             });
            
         });
+}
+
+export const removeTrip = () => { //
+    document.getElementById('temp').innerHTML = '';
+    document.getElementById('duration').innerHTML = '';
+    document.getElementById('content').innerHTML = '';
+    document.getElementById('countryInfo').innerHTML = '';
 }
 
 export const getFromWeatherbit = async (geoData) => { //
@@ -159,7 +166,6 @@ export const updateUI = async (duration) => {
     //
     getData('/country')
         .then((data)=>{
-            console.log(data);
             document.getElementById('countryInfo').innerHTML = `The counrty you want to visit is ${data.name}, and the capital city there is ${data.capital}. ${data.name} is located in ${data.region} region, and the population is estimated at ${data.population} people. The main language in ${data.name} is ${data.language} language, and ${data.currency} is the official currency of ${data.name}. ${data.timezone} is the time zone used in ${data.name}.`
         });
     //
@@ -198,3 +204,4 @@ export const getFromCountryAPI = async (countData) => { //
         console.log(error);
     }
 }
+

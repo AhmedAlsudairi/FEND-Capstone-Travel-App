@@ -84,7 +84,5 @@ app.post('/country', (req, res) => {
         region: newData.region,
         timezone: newData.timezones[0]
     }
-    console.log(newData);
-    console.log(newEntry);
     countriesAPIData = { ...newEntry };
 });
