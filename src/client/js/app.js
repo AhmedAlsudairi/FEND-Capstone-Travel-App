@@ -114,6 +114,10 @@ export const removeTrip = () => { //
     document.getElementById('duration').innerHTML = '';
     document.getElementById('content').innerHTML = '';
     document.getElementById('countryInfo').innerHTML = '';
+    localStorage.removeItem('temp');
+    localStorage.removeItem('content');
+    localStorage.removeItem('countryInfo');
+    localStorage.removeItem('duration');
 }
 
 export const getFromWeatherbit = async (geoData) => { //
@@ -147,7 +151,9 @@ export const getCountdown = () => { //
 export const updateUI = async (duration) => {
     
     //
-    document.getElementById('duration').innerHTML = 'Duration of the trip: '+duration;
+    const dura = 'Duration of the trip: '+duration;
+    document.getElementById('duration').innerHTML = dura;
+    localStorage.setItem('duration',dura);
     //
     getData('/weather')
     .then((data)=>{
@@ -158,7 +164,9 @@ export const updateUI = async (duration) => {
             let b= new Date(data[i].datetime).getTime();
             if (b >= a) {
                 console.log(data[i]);
-                document.getElementById('temp').innerHTML='temp: '+data[i].temp;
+                const temp = 'temp: '+data[i].temp;
+                document.getElementById('temp').innerHTML= temp;
+                localStorage.setItem('temp',temp);
               break;
             }
           }
@@ -166,16 +174,22 @@ export const updateUI = async (duration) => {
     //
     getData('/country')
         .then((data)=>{
-            document.getElementById('countryInfo').innerHTML = `The counrty you want to visit is ${data.name}, and the capital city there is ${data.capital}. ${data.name} is located in ${data.region} region, and the population is estimated at ${data.population} people. The main language in ${data.name} is ${data.language} language, and ${data.currency} is the official currency of ${data.name}. ${data.timezone} is the time zone used in ${data.name}.`
+            const countryInfo = `The counrty you want to visit is ${data.name}, and the capital city there is ${data.capital}. ${data.name} is located in ${data.region} region, and the population is estimated at ${data.population} people. The main language in ${data.name} is ${data.language} language, and ${data.currency} is the official currency of ${data.name}. ${data.timezone} is the time zone used in ${data.name}.`;
+            document.getElementById('countryInfo').innerHTML = countryInfo;
+            localStorage.setItem('countryInfo',countryInfo);
         });
     //
     getData('/pix')
     .then((data)=>{
-        document.getElementById('content').innerHTML = `<img src=${data.hits[0].webformatURL} alt=${city} style="width: 500px; height: 350px;">`;
+        const content = `<img src=${data.hits[0].webformatURL} alt=${city} style="width: 500px; height: 350px;">`;
+        document.getElementById('content').innerHTML = content;
+        localStorage.setItem('content',content);
     })
     .catch((error)=>{
         console.log(error);
-        document.getElementById('content').innerHTML = 'no appropriate image is found';
+        const content = 'No appropriate image is found';
+        document.getElementById('content').innerHTML = content;
+        localStorage.setItem('content',content);
     });
 
 }
@@ -205,3 +219,9 @@ export const getFromCountryAPI = async (countData) => { //
     }
 }
 
+export const getFromLocalStorage = () => {
+    document.getElementById('temp').innerHTML = localStorage.getItem('temp');
+    document.getElementById('duration').innerHTML = localStorage.getItem('duration');
+    document.getElementById('content').innerHTML = localStorage.getItem('content');
+    document.getElementById('countryInfo').innerHTML = localStorage.getItem('countryInfo');
+}
