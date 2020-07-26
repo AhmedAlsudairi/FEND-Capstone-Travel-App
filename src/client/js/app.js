@@ -9,6 +9,8 @@ const weatherbitKey = '&key=62c2c4c4249a47cb9b82e42911703c22';
 
 const pixabayURL = 'https://pixabay.com/api/?&image_type=photo&q=';
 const pixabayKey = '&key=17634723-f4b33149baa42378817312beb';
+
+const  countriesAPI = 'https://restcountries.eu/rest/v2/name/'
 // GET request to geonames
 export const getFromAPI = async (url) => { //
 
@@ -24,8 +26,8 @@ export const getFromAPI = async (url) => { //
 
 
 // POST data to server side (server.js) 
-export const postData = async (url = '', data = {}) => { // 
-    const response = await fetch(url, {
+export const postData = async (route = '', data = {}) => { // 
+    const response = await fetch(`http://localhost:8000${route}`, {
         method: 'POST',
         credentials: 'same-origin',
         headers: {
@@ -44,9 +46,9 @@ export const postData = async (url = '', data = {}) => { //
 }
 
 // update user interface acording to data stored in server side (server.js)
-export const getData = async (url) => { // 
+export const getData = async (route) => { // 
 
-    const request = await fetch(url);
+    const request = await fetch(`http://localhost:8000${route}`);
 
     try {
         const newData = await request.json();
@@ -64,52 +66,46 @@ export const generateListener = () => { //
     const startDate = document.getElementById('date').value;
     const endtDate = document.getElementById('endDate').value;
     const duration =  subtractDates(startDate,endtDate);
-    console.log(duration);
 
     getFromAPI(geoURL)
         .then((data) => {
-            const response = data.geonames[0];
-            const country = response.countryName;
-            const latitude = response.lat;
-            const longitude = response.lng;
 
-            const geonamesData = {
-                country: country,
-                latitude: latitude,
-                longitude: longitude
-            }
-            postData('http://localhost:8000/geo', geonamesData);
+            const geonamesData = data.geonames[0];
+            postData('/geo', geonamesData);
         }).then((data) => {
-            const countdown = getCountdown();
-
-            
             let goeData;
             (async () => {
-                 goeData = await getData('http://localhost:8000/geo');
+                 goeData = await getData('/geo');
+                   
                  getFromWeatherbit(goeData)
-                 .then((whethData)=>{
-                     const weatherbitData = whethData.data;
-                     postData('http://localhost:8000/weather',weatherbitData);
-                     updateUI(duration);
+                 .then((weathData)=>{
+
+                     const weatherbitData = weathData.data;
+                     postData('/weather',weatherbitData);
+                 })
+                 .then(()=>{
+                     getFromCountryAPI(goeData)
+                     .then((countData)=>{
+                         const countryData = countData[0];
+                         console.log(countryData);
+                         postData('/country',countryData);
+                        updateUI(duration);
+                     })
                  });
               })();
         })
         .then(()=>{
             let cityWithoutSpace = city.split(' ');
             cityWithoutSpace= cityWithoutSpace.join('+');
-            console.log(cityWithoutSpace);
             
             const url = pixabayURL+cityWithoutSpace+pixabayKey;
-            console.log(url);
             getFromAPI(url)
-            .then((data)=>{
-                console.log(data);
-                document.getElementById('content').innerHTML = `<img src=${data.hits[0].webformatURL} alt=${city} style="width: 500px; height: 350px;">`;
-            })
-            .catch((error)=>{
-                console.log(error);
-                document.getElementById('content').innerHTML = 'no appropriate image is found';
-            })
+            .then((pixData)=>{
+                console.log(pixData);
+                const pixabayData = pixData;
+                postData('/pix',pixabayData);
+            });
+           
         });
 }
 
@@ -142,13 +138,15 @@ export const getCountdown = () => { //
 }
 
 export const updateUI = async (duration) => {
+    
+    //
     document.getElementById('duration').innerHTML = 'Duration of the trip: '+duration;
-    getData('http://localhost:8000/weather')
+    //
+    getData('/weather')
     .then((data)=>{
         const userDate = document.getElementById('date').value;
 //compare between dates (transfer them to miliseconds)
         let a = new Date(userDate).getTime();
-        console.log(data);
         for (let i = 0; i < data.length; i++) {
             let b= new Date(data[i].datetime).getTime();
             if (b >= a) {
@@ -157,7 +155,23 @@ export const updateUI = async (duration) => {
               break;
             }
           }
+    });
+    //
+    getData('/country')
+        .then((data)=>{
+            console.log(data);
+            document.getElementById('countryInfo').innerHTML = `The counrty you want to visit is ${data.name}, and the capital city there is ${data.capital}. ${data.name} is located in ${data.region} region, and the population is estimated at ${data.population} people. The main language in ${data.name} is ${data.language} language, and ${data.currency} is the official currency of ${data.name}. ${data.timezone} is the time zone used in ${data.name}.`
+        });
+    //
+    getData('/pix')
+    .then((data)=>{
+        document.getElementById('content').innerHTML = `<img src=${data.hits[0].webformatURL} alt=${city} style="width: 500px; height: 350px;">`;
     })
+    .catch((error)=>{
+        console.log(error);
+        document.getElementById('content').innerHTML = 'no appropriate image is found';
+    });
+
 }
 
 
@@ -172,6 +186,15 @@ export const subtractDates = (dateOne,dateTwo) => {
     return result;
 }
 
-export const addDurationToUI = () => {
-    
+
+export const getFromCountryAPI = async (countData) => { //
+    const country = countData.country;
+
+    const request = await fetch(countriesAPI+country);
+    try{
+        const newData = await request.json();
+        return newData;
+    }catch(error){
+        console.log(error);
+    }
 }
