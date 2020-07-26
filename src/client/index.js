@@ -8,7 +8,13 @@ create.addEventListener('click', createTrip);
 const remove = document.getElementById('remove');
 remove.addEventListener('click', removeTrip);
 
+const print = document.getElementById('print');
+print.addEventListener('click', ()=>{
+    window.print();
+});
+
 window.addEventListener('load', getFromLocalStorage);
+
 
 export{
     createTrip,

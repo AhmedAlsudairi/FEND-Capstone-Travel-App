@@ -69,7 +69,7 @@ export const createTrip = () => { //
 
     getFromAPI(geoURL)
         .then((data) => {
-
+            console.log(data);
             const geonamesData = data.geonames[0];
             postData('/geo', geonamesData);
         }).then((data) => {
@@ -160,14 +160,19 @@ export const updateUI = async (duration) => {
         const userDate = document.getElementById('date').value;
 //compare between dates (transfer them to miliseconds)
         let a = new Date(userDate).getTime();
+        let counter = 1;
+        let temp='';
         for (let i = 0; i < data.length; i++) {
             let b= new Date(data[i].datetime).getTime();
             if (b >= a) {
                 console.log(data[i]);
-                const temp = 'temp: '+data[i].temp;
+                temp += `Day${counter}: ${data[i].temp}C ${data[i].weather.icon} `;
                 document.getElementById('temp').innerHTML= temp;
                 localStorage.setItem('temp',temp);
-              break;
+                if(counter==5){
+                    break;
+                }
+                counter++;
             }
           }
     });
