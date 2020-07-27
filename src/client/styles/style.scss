@@ -53,11 +53,33 @@
 //     box-shadow: 2px 4px 5px #444;
 // }
 
-h1 {
+#header {
     text-align: center;
     width: 100%;
+    margin-top: 15px;
 }
 
+.title{
+    font-weight: bold;
+    font-size: larger;
+}
+
+span{
+    font-weight: bold;
+    color: royalblue;
+}
+
+#caption{
+    width: 100%;
+    font-weight: bold;
+    text-align: center;
+}
+
+img{
+    width: 500px; 
+    height: 350px;
+    border-radius: 5px;
+}
 // textarea {
 //     background: #22b2da;
 //     color: #f0d43a;

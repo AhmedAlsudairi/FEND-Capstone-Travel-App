@@ -11,6 +11,8 @@ const pixabayURL = 'https://pixabay.com/api/?&image_type=photo&q=';
 const pixabayKey = '&key=17634723-f4b33149baa42378817312beb';
 
 const  countriesAPI = 'https://restcountries.eu/rest/v2/name/'
+
+let city;
 // GET request to geonames
 export const getFromAPI = async (url) => { //
 
@@ -61,7 +63,7 @@ export const getData = async (route) => { //
 
 // get city from the user, then send GET request to geonames, then POST the data to server side (server.js), and then update the user interface
 export const createTrip = () => { //
-    const city = document.getElementById('city').value;
+    city = document.getElementById('city').value;
     const geoURL = geonamesURL + city + geonamesKey;
     const startDate = document.getElementById('date').value;
     const endtDate = document.getElementById('endDate').value;
@@ -151,7 +153,7 @@ export const getCountdown = () => { //
 export const updateUI = async (duration) => {
     
     //
-    const dura = 'Duration of the trip: '+duration;
+    const dura = '<strong>Duration of your trip:</strong> '+duration+' day(s)';
     document.getElementById('duration').innerHTML = dura;
     localStorage.setItem('duration',dura);
     //
@@ -161,12 +163,12 @@ export const updateUI = async (duration) => {
 //compare between dates (transfer them to miliseconds)
         let a = new Date(userDate).getTime();
         let counter = 1;
-        let temp='';
+        let temp='<strong>Weather forcast:</strong> <br>';
         for (let i = 0; i < data.length; i++) {
             let b= new Date(data[i].datetime).getTime();
             if (b >= a) {
                 console.log(data[i]);
-                temp += `Day${counter}: ${data[i].temp}C ${data[i].weather.icon} `;
+                temp += `<span>Day ${counter}:</span> ${data[i].temp}C `;
                 document.getElementById('temp').innerHTML= temp;
                 localStorage.setItem('temp',temp);
                 if(counter==5){
@@ -179,20 +181,22 @@ export const updateUI = async (duration) => {
     //
     getData('/country')
         .then((data)=>{
-            const countryInfo = `The counrty you want to visit is ${data.name}, and the capital city there is ${data.capital}. ${data.name} is located in ${data.region} region, and the population is estimated at ${data.population} people. The main language in ${data.name} is ${data.language} language, and ${data.currency} is the official currency of ${data.name}. ${data.timezone} is the time zone used in ${data.name}.`;
+            const countryInfo = `<h3>Result:</h3> <br> <strong>Country information:</strong> <br> The counrty you want to visit is ${data.name}, and the capital city there is ${data.capital}. ${data.name} is located in ${data.region} region, and the population is estimated at ${data.population} people. The main language in ${data.name} is ${data.language} language, and ${data.currency} is the official currency of ${data.name}. ${data.timezone} is the time zone used in ${data.name}.`;
             document.getElementById('countryInfo').innerHTML = countryInfo;
             localStorage.setItem('countryInfo',countryInfo);
         });
     //
     getData('/pix')
     .then((data)=>{
-        const content = `<img src=${data.hits[0].webformatURL} alt=${city} style="width: 500px; height: 350px;">`;
+        const content = `<img src=${data.hits[0].webformatURL} alt=${city}>
+                        <br>
+                        <div id="caption">${city}</div>`;
         document.getElementById('content').innerHTML = content;
         localStorage.setItem('content',content);
     })
     .catch((error)=>{
         console.log(error);
-        const content = 'No appropriate image is found';
+        const content = '<strong>No appropriate image is found</strong>';
         document.getElementById('content').innerHTML = content;
         localStorage.setItem('content',content);
     });
@@ -229,4 +233,24 @@ export const getFromLocalStorage = () => {
     document.getElementById('duration').innerHTML = localStorage.getItem('duration');
     document.getElementById('content').innerHTML = localStorage.getItem('content');
     document.getElementById('countryInfo').innerHTML = localStorage.getItem('countryInfo');
+}
+
+export const greeting = () => {
+    var now= new Date();
+	var hour=now.getHours();
+    var greeting= document.getElementById("greeting");
+    if(hour<12){
+        greeting.innerHTML="Hello,Good morning!";
+    }
+	if(hour>=12){
+        hour=hour-12;
+
+        if(hour<6){
+            greeting.innerHTML="Hello,Good afternoon!";
+        }
+		
+		if(hour>=6) {
+            greeting.innerHTML="Hello,Good evening!";
+        }
+    }
 }

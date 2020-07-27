@@ -12,49 +12,84 @@
   <div id="app" class="container">
     <div class="container">
       <div class="row">
-     <h1>Capstone: Travel App</h1> 
+     <h1 id="header">Capstone: Travel App</h1> 
     </div>
     </div>
     <hr>
-    <div class="container">
-      <div class="row">
+    <div class="jumbotron">
+      <h1 class="display-4" id="greeting"></h1>
+      <p class="lead">Enter your destination and the dates of your trip, then get weather forecast, language, currency, time zone, and much more information about your destination. Try it by your self! </p>
+      <hr class="my-4">
+      <p>More about me</p>
+      <a class="btn btn-primary btn-md" href="https://www.linkedin.com/in/ahmed-alsudairi-77569219b" role="button" target="blank">Linkedin</a>
+      <a class="btn btn-primary btn-md" href="https://github.com/AhmedAlsudairi " role="button" target="-blank">GitHub</a>
+    </div>
+          
+    <form>
+      <div class="form-group">
+      <div class="form-row">
         <div class="col-12">
       <label for="city">Enter City: </label>
-      <input type="text" id="city" placeholder="enter city here">
+      <input class="form-control" type="text" id="city" placeholder="enter city here">
         </div>
     </div>
-    <div class="row">
+    <div class="form-row">
         <div class="col">
         <label for="date">Start Date: </label>
-        <input type="date" id="date" placeholder="enter start date here">
+        <input class="form-control" type="date" id="date" placeholder="enter start date here">
         </div>
         
         <div class="col">
           <label for="endDate">End Date: </label>
-          <input type="date" id="endDate" placeholder="enter end date here">
+          <input class="form-control" type="date" id="endDate" placeholder="enter end date here">
         </div>
     </div>
-    <div class="row">
-        <div class="col-6"></div>
-        <div class="col-6">
+    <br>
+    <div class="form-row">
+      <div class="col-12">
         <button id="create" type="button" class="btn btn-primary"> Create trip </button>
         <button id="remove" type="button" class="btn btn-danger"> Remove trip </button>
         <button id="print" type="button" class="btn btn-dark"> Print </button>
-        </div>
+      </div>
+        
         </div>
     </div>
+    </form>
+    
   
-
-    <div class="holder entry" id="entryHolder">
-      <div class="title">Result:</div>
-      <div id="entryHolder">
-        <div id="city"></div>
-        <div id="temp"></div>
-        <div id="content"></div>
-        <div id="duration"></div>
-        <div id="countryInfo"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col"> 
+          <div id="countryInfo"></div>
+          <br>
+          <div id="duration"></div>
+          <br>
+          <div id="temp"></div> 
+      </div>
+        <div class="col">
+          <div id="content"></div>
+        </div>
       </div>
     </div>
+
+    <!-- <div class="container">
+      <div class="title">Result:</div>
+      <div id="row">
+        <div class="col">
+          <div id="duration"></div>
+          <div id="temp"></div>
+        </div>
+
+        <div class="col">
+          
+          <div id="content"></div>
+        </div>
+        
+      </div>
+        <div class="row">
+          <div id="countryInfo"></div>
+        </div>
+    </div> -->
   </div>
   <script>
     // Check that service workers are supported
