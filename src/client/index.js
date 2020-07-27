@@ -1,5 +1,6 @@
 import {createTrip,getCountdown,getFromAPI,getFromWeatherbit,getData,updateUI,postData,subtractDates,removeTrip,getFromLocalStorage} from '../client/js/app';
 import '../client/styles/style.scss';
+import 'bootstrap/dist/css/bootstrap.min.css';
 document.addEventListener('load',getFromLocalStorage);
 //click listener to execute getData function
 const create = document.getElementById('create');
