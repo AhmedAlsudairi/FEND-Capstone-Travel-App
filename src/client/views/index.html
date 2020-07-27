@@ -9,29 +9,44 @@
 </head>
 
 <body>
-  <div class="alert alert-primary" role="alert">
-    A simple primary alert—check it out!
-  </div>
-  <div id="app">
-    <div class="holder headline">
-      Weather Journal App
+  <div id="app" class="container">
+    <div class="container">
+      <div class="row">
+     <h1>Capstone: Travel App</h1> 
     </div>
-    <div class="holder zip">
-      <label for="city">Enter City here</label>
+    </div>
+    <hr>
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+      <label for="city">Enter City: </label>
       <input type="text" id="city" placeholder="enter city here">
+        </div>
     </div>
-    <div class="holder feel">
-        <label for="date">Enter Date here</label>
+    <div class="row">
+        <div class="col">
+        <label for="date">Start Date: </label>
         <input type="date" id="date" placeholder="enter start date here">
-        <br>
-        <input type="date" id="endDate" placeholder="enter end date here">
-        <br>
-      <button id="create" type="submit"> Create trip </button>
-      <button id="remove" type="submit"> Remove trip </button>
-      <button id="print" type="submit"> Print </button>
+        </div>
+        
+        <div class="col">
+          <label for="endDate">End Date: </label>
+          <input type="date" id="endDate" placeholder="enter end date here">
+        </div>
     </div>
+    <div class="row">
+        <div class="col-6"></div>
+        <div class="col-6">
+        <button id="create" type="button" class="btn btn-primary"> Create trip </button>
+        <button id="remove" type="button" class="btn btn-danger"> Remove trip </button>
+        <button id="print" type="button" class="btn btn-dark"> Print </button>
+        </div>
+        </div>
+    </div>
+  
+
     <div class="holder entry" id="entryHolder">
-      <div class="title">Most Recent Entry</div>
+      <div class="title">Result:</div>
       <div id="entryHolder">
         <div id="city"></div>
         <div id="temp"></div>

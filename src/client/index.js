@@ -1,4 +1,4 @@
-import {createTrip,getCountdown,getFromAPI,getFromWeatherbit,getData,updateUI,postData,subtractDates,removeTrip,getFromLocalStorage} from '../client/js/app';
+import {createTrip,getCountdown,getFromAPI,getFromWeatherbit,getData,updateUI,postData,subtractDates,removeTrip,getFromLocalStorage,getFromCountryAPI} from '../client/js/app';
 import '../client/styles/style.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 document.addEventListener('load',getFromLocalStorage);
@@ -26,5 +26,7 @@ export{
     updateUI,
     postData,
     subtractDates,
-    getFromLocalStorage
+    getFromLocalStorage,
+    removeTrip,
+    getFromCountryAPI
 }
