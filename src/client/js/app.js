@@ -1,34 +1,38 @@
 
 /* Global Variables */
-// base URL for geonames API
+// base URL and key for geonames API
 const geonamesURL = 'http://api.geonames.org/searchJSON?q=';
 const geonamesKey = '&username=a7mad1199';
-
+// base URL and key for weatherbit API
 const weatherbitURL = 'https://api.weatherbit.io/v2.0/forecast/daily';
 const weatherbitKey = '&key=62c2c4c4249a47cb9b82e42911703c22';
-
+// base URL and key for pixabay API
 const pixabayURL = 'https://pixabay.com/api/?&image_type=photo&q=';
 const pixabayKey = '&key=17634723-f4b33149baa42378817312beb';
-
+// base URL and key for REST Countries API
 const  countriesAPI = 'https://restcountries.eu/rest/v2/name/'
+// hold the value of the input element that entered by the user
+let destination;
+//
 
-let city;
-// GET request to geonames
-export const getFromAPI = async (url) => { //
+
+// GET request to any external API
+export const getFromAPI = async (url) => { 
 
     const request = await fetch(url);
 
     try {
         const newData = await request.json();
         return newData;
+
     } catch (error) {
         console.log(error);
     }
 }
 
+// POST data to express server (index.js) 
+export const postData = async (route = '', data = {}) => { 
 
-// POST data to server side (server.js) 
-export const postData = async (route = '', data = {}) => { // 
     const response = await fetch(`http://localhost:8000${route}`, {
         method: 'POST',
         credentials: 'same-origin',
@@ -47,7 +51,7 @@ export const postData = async (route = '', data = {}) => { //
     }
 }
 
-// update user interface acording to data stored in server side (server.js)
+// get data from express server (index.js) 
 export const getData = async (route) => { // 
 
     const request = await fetch(`http://localhost:8000${route}`);
@@ -55,19 +59,20 @@ export const getData = async (route) => { //
     try {
         const newData = await request.json();
        return newData;
+
     } catch (error) {
         console.log(error);
 
     }
 }
 
-// get city from the user, then send GET request to geonames, then POST the data to server side (server.js), and then update the user interface
-export const createTrip = () => { //
-    city = document.getElementById('city').value;
-    const geoURL = geonamesURL + city + geonamesKey;
-    const startDate = document.getElementById('date').value;
+// create trip according to the user trip data, then invoke the User Interface
+export const createTrip = () => {
+    const startDate = document.getElementById('startDate').value;
     const endtDate = document.getElementById('endDate').value;
     const duration =  subtractDates(startDate,endtDate);
+    destination = document.getElementById('destination').value;
+    const geoURL = geonamesURL + destination + geonamesKey;
 
     getFromAPI(geoURL)
         .then((data) => {
@@ -96,10 +101,10 @@ export const createTrip = () => { //
               })();
         })
         .then(()=>{
-            let cityWithoutSpace = city.split(' ');
-            cityWithoutSpace= cityWithoutSpace.join('+');
+            let destinationWithoutSpace = destination.split(' ');
+            destinationWithoutSpace= destinationWithoutSpace.join('+');
             
-            const url = pixabayURL+cityWithoutSpace+pixabayKey;
+            const url = pixabayURL+destinationWithoutSpace+pixabayKey;
             getFromAPI(url)
             .then((pixData)=>{
                 const pixabayData = pixData;
@@ -141,13 +146,14 @@ export const getCountdown = () => { //
 
     today = yyyy+'-'+mm+'-'+dd;
 
-    const userDate = document.getElementById('date').value;
+    const userDate = document.getElementById('startDate').value;
 
   
     const daysLeft = subtractDates(today,userDate);
     return daysLeft;
 }
 
+// update user interface acording to data stored in server side (server.js)
 export const updateUI = async (duration) => {
     
     //
@@ -157,7 +163,7 @@ export const updateUI = async (duration) => {
     //
     getData('/weather')
     .then((data)=>{
-        const userDate = document.getElementById('date').value;
+        const userDate = document.getElementById('startDate').value;
 //compare between dates (transfer them to miliseconds)
         let a = new Date(userDate).getTime();
         let counter = 1;
@@ -178,16 +184,16 @@ export const updateUI = async (duration) => {
     //
     getData('/country')
         .then((data)=>{
-            const countryInfo = `<h3>Result:</h3> <br> <strong>Country information:</strong> <br> The counrty you want to visit is ${data.name}, and the capital city there is ${data.capital}. ${data.name} is located in ${data.region} region, and the population is estimated at ${data.population} people. The main language in ${data.name} is ${data.language} language, and ${data.currency} is the official currency of ${data.name}. ${data.timezone} is the time zone used in ${data.name}.`;
+            const countryInfo = `<h3>Result:</h3> <br> <strong>Country information:</strong> <br> The counrty you want to visit is ${data.name}, and the capital destination there is ${data.capital}. ${data.name} is located in ${data.region} region, and the population is estimated at ${data.population} people. The main language in ${data.name} is ${data.language} language, and ${data.currency} is the official currency of ${data.name}. ${data.timezone} is the time zone used in ${data.name}.`;
             document.getElementById('countryInfo').innerHTML = countryInfo;
             localStorage.setItem('countryInfo',countryInfo);
         });
     //
     getData('/pix')
     .then((data)=>{
-        const content = `<img src=${data.hits[0].webformatURL} alt=${city}>
+        const content = `<img src=${data.hits[0].webformatURL} alt=${destination}>
                         <br>
-                        <div id="caption">${city}</div>`;
+                        <div id="caption">${destination}</div>`;
         document.getElementById('content').innerHTML = content;
         localStorage.setItem('content',content);
     })
