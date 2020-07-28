@@ -71,17 +71,17 @@ export const createTrip = () => { //
 
     getFromAPI(geoURL)
         .then((data) => {
-            console.log(data);
             const geonamesData = data.geonames[0];
             postData('/geo', geonamesData);
         }).then((data) => {
             let goeData;
             (async () => {
+                alert('hi')
                  goeData = await getData('/geo');
                    
                  getFromWeatherbit(goeData)
                  .then((weathData)=>{
-
+                    console.log(weathData);
                      const weatherbitData = weathData.data;
                      postData('/weather',weatherbitData);
                  })
@@ -89,7 +89,6 @@ export const createTrip = () => { //
                      getFromCountryAPI(goeData)
                      .then((countData)=>{
                          const countryData = countData[0];
-                         console.log(countryData);
                          postData('/country',countryData);
                         updateUI(duration);
                      })
@@ -103,7 +102,6 @@ export const createTrip = () => { //
             const url = pixabayURL+cityWithoutSpace+pixabayKey;
             getFromAPI(url)
             .then((pixData)=>{
-                console.log(pixData);
                 const pixabayData = pixData;
                 postData('/pix',pixabayData);
             });
@@ -167,7 +165,6 @@ export const updateUI = async (duration) => {
         for (let i = 0; i < data.length; i++) {
             let b= new Date(data[i].datetime).getTime();
             if (b >= a) {
-                console.log(data[i]);
                 temp += `<span>Day ${counter}:</span> ${data[i].temp}C `;
                 document.getElementById('temp').innerHTML= temp;
                 localStorage.setItem('temp',temp);
@@ -213,7 +210,6 @@ export const subtractDates = (dateOne,dateTwo) => {
     const difference = d2 - d1;
   
     const result = Math.ceil(difference / 86400000);
-    console.log(result);
     return result;
 }
 
