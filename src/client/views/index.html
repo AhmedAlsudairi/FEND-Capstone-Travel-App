@@ -17,10 +17,10 @@
     </div>
     <hr>
     <div class="jumbotron">
-      <h1 class="display-4" id="greeting"></h1>
+      <h2 class="display-4" id="greeting"></h2>
       <p class="lead">Enter your destination and the dates of your trip, then get weather forecast, language, currency, time zone, and much more information about your destination. Try it by your self! </p>
       <hr class="my-4">
-      <p>More about me</p>
+      <p id="more">More about me</p>
       <a class="btn btn-primary btn-md" href="https://www.linkedin.com/in/ahmed-alsudairi-77569219b" role="button" target="blank">Linkedin</a>
       <a class="btn btn-primary btn-md" href="https://github.com/AhmedAlsudairi " role="button" target="-blank">GitHub</a>
     </div>
@@ -29,8 +29,8 @@
       <div class="form-group">
       <div class="form-row">
         <div class="col-12">
-      <label for="city">Enter City: </label>
-      <input class="form-control" type="text" id="city" placeholder="enter city here">
+      <label for="city">Destination: </label>
+      <input class="form-control" type="text" id="city" placeholder="Enter your destination here">
         </div>
     </div>
     <div class="form-row">
@@ -57,7 +57,7 @@
     </form>
     
   
-    <div class="container">
+    <div class="container" id="result">
       <div class="row">
         <div class="col"> 
           <div id="countryInfo"></div>
@@ -71,25 +71,8 @@
         </div>
       </div>
     </div>
-
-    <!-- <div class="container">
-      <div class="title">Result:</div>
-      <div id="row">
-        <div class="col">
-          <div id="duration"></div>
-          <div id="temp"></div>
-        </div>
-
-        <div class="col">
-          
-          <div id="content"></div>
-        </div>
-        
-      </div>
-        <div class="row">
-          <div id="countryInfo"></div>
-        </div>
-    </div> -->
+    <hr>
+    <p id="footer">Udacity ® 2020 </p>
   </div>
   <script>
     // Check that service workers are supported

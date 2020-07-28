@@ -196,7 +196,9 @@ export const updateUI = async (duration) => {
     })
     .catch((error)=>{
         console.log(error);
-        const content = '<strong>No appropriate image is found</strong>';
+        const content = `<div class="alert alert-danger" role="alert">
+        No appropriate image is found!
+      </div>`;
         document.getElementById('content').innerHTML = content;
         localStorage.setItem('content',content);
     });
