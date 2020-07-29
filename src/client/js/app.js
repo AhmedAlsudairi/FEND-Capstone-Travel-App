@@ -137,7 +137,6 @@ export const createTrip = () => {
                     getFromWeatherbit(geoData)
                         .then((weathData) => {
                             const weatherbitData = weathData.data;
-                            console.log(weatherbitData);
                             postData('/weather', weatherbitData);
                             updateUI(duration, startDate);
                         })
@@ -146,7 +145,6 @@ export const createTrip = () => {
         .then(() => {
             getData('/geo')
                 .then((geoData) => {
-                    console.log(geoData);
                     getFromCountryAPI(geoData)
                         .then((countData) => {
                             const countryData = countData[0];
