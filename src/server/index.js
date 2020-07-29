@@ -38,7 +38,7 @@ app.post('/geo', (req, res) => {
         longitude: newData.lng
     }
     geoData = { ...newEntry };
-
+    res.send(geoData)
 });
 
 //GET route for weatherbit data
@@ -51,6 +51,7 @@ app.get('/weather', (req, res) => {
 app.post('/weather', (req, res) => {
     const newData = req.body;
     weatherData = { ...newData, length: 16 };
+    res.send(weatherData)
 });
 
 //GET route for pixabay data
@@ -63,6 +64,7 @@ app.get('/pix', (req, res) => {
 app.post('/pix', (req, res) => {
     const newData = req.body;
     pixabayData = { ...newData };
+    res.send(pixabayData)
 });
 
 //GET route for  REST Countries API data
@@ -84,4 +86,5 @@ app.post('/country', (req, res) => {
         timezone: newData.timezones[0]
     }
     countriesAPIData = { ...newEntry };
+    res.send(countriesAPIData)
 });

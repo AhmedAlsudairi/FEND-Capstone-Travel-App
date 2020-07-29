@@ -17,7 +17,7 @@ const countriesAPI = 'https://restcountries.eu/rest/v2/name/'
 
 // hold the value of the input element that entered by the user
 let destination;
-
+let spinner = document.getElementById('spinner');
 
 /* Asynchronous Functions */
 
@@ -121,42 +121,50 @@ export const getFromCountryAPI = async (countData) => {
 
 // create trip according to the user trip data, then invoke the User Interface
 export const createTrip = () => {
+
     const startDate = document.getElementById('startDate').value;
     const endtDate = document.getElementById('endDate').value;
     const duration = subtractDates(startDate, endtDate);
     destination = document.getElementById('destination').value;
+    spinner.innerHTML = `<div class="d-flex justify-content-center">
+                        <div class="spinner-border text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
+                        </div>
+                        </div>`;
 
     getFromGeonamesAPI(destination)
         .then((geoData) => {
             const geonamesData = geoData.geonames[0];
-            postData('/geo', geonamesData);
-        })
-        .then(() => {
-            getData('/geo')
-                .then((geoData) => {
-                    getFromWeatherbit(geoData)
-                        .then((weathData) => {
-                            const weatherbitData = weathData.data;
-                            postData('/weather', weatherbitData);
-                            updateUI(duration, startDate);
-                        })
-                });
-        })
-        .then(() => {
-            getData('/geo')
-                .then((geoData) => {
-                    getFromCountryAPI(geoData)
-                        .then((countData) => {
-                            const countryData = countData[0];
-                            postData('/country', countryData);
-                        })
-                });
-        })
-        .then(() => {
-            getFromPixabayAPI(destination)
-                .then((pixData) => {
-                    const pixabayData = pixData;
-                    postData('/pix', pixabayData);
+            postData('/geo', geonamesData)
+                .then(() => {
+                    getData('/geo')
+                        .then((geoData) => {
+                            getFromWeatherbit(geoData)
+                                .then((weathData) => {
+                                    const weatherbitData = weathData.data;
+                                    postData('/weather', weatherbitData)
+                                        .then(() => {
+                                            getData('/geo')
+                                                .then((geoData) => {
+                                                    getFromCountryAPI(geoData)
+                                                        .then((countData) => {
+                                                            const countryData = countData[0];
+                                                            postData('/country', countryData)
+                                                                .then(() => {
+                                                                    getFromPixabayAPI(destination)
+                                                                        .then((pixData) => {
+                                                                            const pixabayData = pixData;
+                                                                            postData('/pix', pixabayData)
+                                                                                .then(() => {
+                                                                                    updateUI(duration, startDate);
+                                                                                });
+                                                                        });
+                                                                });
+                                                        });
+                                                });
+                                        });
+                                });
+                        });
                 });
         });
 }
@@ -176,6 +184,7 @@ export const removeTrip = () => {
 // update user interface according to the data stored in express server (index.js)
 export const updateUI = (duration, startDate) => {
 
+    spinner.innerHTML = '';
     const countdown = getCountdown(startDate);
     const dura = `<strong>Duration of your trip:</strong> ${duration} day(s)`;
     document.getElementById('duration').innerHTML = dura;
@@ -206,7 +215,7 @@ export const updateUI = (duration, startDate) => {
 
     getData('/country')
         .then((data) => {
-            const countryInfo = `<h3>${countdown} days to go!</h3>
+            const countryInfo = `<h3>${countdown} day(s) to go!</h3>
                                 <br>
                                 <strong>Country information:</strong>
                                 <br>
