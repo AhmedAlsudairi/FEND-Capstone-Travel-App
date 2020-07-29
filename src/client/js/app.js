@@ -1,37 +1,28 @@
-
 /* Global Variables */
+
 // base URL and key for geonames API
 const geonamesURL = 'http://api.geonames.org/searchJSON?q=';
 const geonamesKey = '&username=a7mad1199';
+
 // base URL and key for weatherbit API
 const weatherbitURL = 'https://api.weatherbit.io/v2.0/forecast/daily';
 const weatherbitKey = '&key=62c2c4c4249a47cb9b82e42911703c22';
+
 // base URL and key for pixabay API
 const pixabayURL = 'https://pixabay.com/api/?&image_type=photo&q=';
 const pixabayKey = '&key=17634723-f4b33149baa42378817312beb';
+
 // base URL and key for REST Countries API
-const  countriesAPI = 'https://restcountries.eu/rest/v2/name/'
+const countriesAPI = 'https://restcountries.eu/rest/v2/name/'
+
 // hold the value of the input element that entered by the user
 let destination;
-//
 
 
-// GET request to any external API
-export const getFromAPI = async (url) => { 
-
-    const request = await fetch(url);
-
-    try {
-        const newData = await request.json();
-        return newData;
-
-    } catch (error) {
-        console.log(error);
-    }
-}
+/* Asynchronous Functions */
 
 // POST data to express server (index.js) 
-export const postData = async (route = '', data = {}) => { 
+export const postData = async (route = '', data = {}) => {
 
     const response = await fetch(`http://localhost:8000${route}`, {
         method: 'POST',
@@ -58,7 +49,7 @@ export const getData = async (route) => { //
 
     try {
         const newData = await request.json();
-       return newData;
+        return newData;
 
     } catch (error) {
         console.log(error);
@@ -66,55 +57,114 @@ export const getData = async (route) => { //
     }
 }
 
+// get request to Geonames API
+export const getFromGeonamesAPI = async (destination) => {
+
+    const request = await fetch(geonamesURL + destination + geonamesKey);
+
+    try {
+        const newData = await request.json();
+        return newData;
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+// get request to Pixabay API
+export const getFromPixabayAPI = async (destination) => {
+
+    let destinationWithoutSpace = destination.split(' ');
+    destinationWithoutSpace = destinationWithoutSpace.join('+');
+
+    const request = await fetch(pixabayURL + destinationWithoutSpace + pixabayKey);
+
+    try {
+        const newData = await request.json();
+        return newData;
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+// get request to Weatherbit API
+export const getFromWeatherbit = async (geoData) => {
+
+    const lat = geoData.latitude;
+    const lng = geoData.longitude;
+
+    const request = await fetch(weatherbitURL + `?&lat=${lat}&lon=${lng}` + weatherbitKey);
+    try {
+        const newData = await request.json();
+        return newData;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+// get request to REST Country API
+export const getFromCountryAPI = async (countData) => {
+
+    const country = countData.country;
+
+    const request = await fetch(countriesAPI + country);
+    try {
+        const newData = await request.json();
+        return newData;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/* Main Functions */
+
 // create trip according to the user trip data, then invoke the User Interface
 export const createTrip = () => {
     const startDate = document.getElementById('startDate').value;
     const endtDate = document.getElementById('endDate').value;
-    const duration =  subtractDates(startDate,endtDate);
+    const duration = subtractDates(startDate, endtDate);
     destination = document.getElementById('destination').value;
-    const geoURL = geonamesURL + destination + geonamesKey;
 
-    getFromAPI(geoURL)
-        .then((data) => {
-            const geonamesData = data.geonames[0];
+    getFromGeonamesAPI(destination)
+        .then((geoData) => {
+            const geonamesData = geoData.geonames[0];
             postData('/geo', geonamesData);
-        }).then((data) => {
-            let goeData;
-            (async () => {
-                alert('hi')
-                 goeData = await getData('/geo');
-                   
-                 getFromWeatherbit(goeData)
-                 .then((weathData)=>{
-                    console.log(weathData);
-                     const weatherbitData = weathData.data;
-                     postData('/weather',weatherbitData);
-                 })
-                 .then(()=>{
-                     getFromCountryAPI(goeData)
-                     .then((countData)=>{
-                         const countryData = countData[0];
-                         postData('/country',countryData);
-                        updateUI(duration);
-                     })
-                 });
-              })();
         })
-        .then(()=>{
-            let destinationWithoutSpace = destination.split(' ');
-            destinationWithoutSpace= destinationWithoutSpace.join('+');
-            
-            const url = pixabayURL+destinationWithoutSpace+pixabayKey;
-            getFromAPI(url)
-            .then((pixData)=>{
-                const pixabayData = pixData;
-                postData('/pix',pixabayData);
-            });
-           
+        .then(() => {
+            getData('/geo')
+                .then((geoData) => {
+                    getFromWeatherbit(geoData)
+                        .then((weathData) => {
+                            const weatherbitData = weathData.data;
+                            console.log(weatherbitData);
+                            postData('/weather', weatherbitData);
+                            updateUI(duration, startDate);
+                        })
+                });
+        })
+        .then(() => {
+            getData('/geo')
+                .then((geoData) => {
+                    console.log(geoData);
+                    getFromCountryAPI(geoData)
+                        .then((countData) => {
+                            const countryData = countData[0];
+                            postData('/country', countryData);
+                        })
+                });
+        })
+        .then(() => {
+            getFromPixabayAPI(destination)
+                .then((pixData) => {
+                    const pixabayData = pixData;
+                    postData('/pix', pixabayData);
+                });
         });
 }
 
-export const removeTrip = () => { //
+// remove the trip from the User Interface and from Local Storage
+export const removeTrip = () => {
     document.getElementById('temp').innerHTML = '';
     document.getElementById('duration').innerHTML = '';
     document.getElementById('content').innerHTML = '';
@@ -125,113 +175,66 @@ export const removeTrip = () => { //
     localStorage.removeItem('duration');
 }
 
-export const getFromWeatherbit = async (geoData) => { //
-     const lat = geoData.latitude;
-     const lng = geoData.longitude;
+// update user interface according to the data stored in express server (index.js)
+export const updateUI = (duration, startDate) => {
 
-     const request = await fetch(weatherbitURL+`?&lat=${lat}&lon=${lng}`+weatherbitKey);
-     try{
-         const newData = await request.json();
-         return newData;
-     }catch(error){
-         console.log(error);
-     }
-}
-
-export const getCountdown = () => { //
-    let today = new Date();
-    const dd = String(today.getDate()).padStart(2, '0');
-    const mm = String(today.getMonth() + 1).padStart(2, '0');
-    const yyyy = today.getFullYear();
-
-    today = yyyy+'-'+mm+'-'+dd;
-
-    const userDate = document.getElementById('startDate').value;
-
-  
-    const daysLeft = subtractDates(today,userDate);
-    return daysLeft;
-}
-
-// update user interface acording to data stored in server side (server.js)
-export const updateUI = async (duration) => {
-    
-    //
-    const dura = '<strong>Duration of your trip:</strong> '+duration+' day(s)';
+    const countdown = getCountdown(startDate);
+    const dura = `<strong>Duration of your trip:</strong> ${duration} day(s)`;
     document.getElementById('duration').innerHTML = dura;
-    localStorage.setItem('duration',dura);
-    //
+    localStorage.setItem('duration', dura);
+
     getData('/weather')
-    .then((data)=>{
-        const userDate = document.getElementById('startDate').value;
-//compare between dates (transfer them to miliseconds)
-        let a = new Date(userDate).getTime();
-        let counter = 1;
-        let temp='<strong>Weather forcast:</strong> <br>';
-        for (let i = 0; i < data.length; i++) {
-            let b= new Date(data[i].datetime).getTime();
-            if (b >= a) {
-                temp += `<span>Day ${counter}:</span> ${data[i].temp}C `;
-                document.getElementById('temp').innerHTML= temp;
-                localStorage.setItem('temp',temp);
-                if(counter==5){
-                    break;
+        .then((data) => {
+            let a = new Date(startDate).getTime();
+            let counter = 1;
+            let temp = '<strong>Weather forcast:</strong> <br>';
+
+            // find the correct date from 16 date forcast array
+            for (let i = 0; i < data.length; i++) {
+
+                let b = new Date(data[i].datetime).getTime();
+
+                if (b >= a) {
+                    temp += `<span>Day ${counter}:</span> ${data[i].temp}C `;
+                    if (counter == 5) {
+                        break;
+                    }
+                    counter++;
                 }
-                counter++;
             }
-          }
-    });
-    //
-    getData('/country')
-        .then((data)=>{
-            const countryInfo = `<h3>Result:</h3> <br> <strong>Country information:</strong> <br> The counrty you want to visit is ${data.name}, and the capital destination there is ${data.capital}. ${data.name} is located in ${data.region} region, and the population is estimated at ${data.population} people. The main language in ${data.name} is ${data.language} language, and ${data.currency} is the official currency of ${data.name}. ${data.timezone} is the time zone used in ${data.name}.`;
-            document.getElementById('countryInfo').innerHTML = countryInfo;
-            localStorage.setItem('countryInfo',countryInfo);
+            document.getElementById('temp').innerHTML = temp;
+            localStorage.setItem('temp', temp);
         });
-    //
+
+    getData('/country')
+        .then((data) => {
+            const countryInfo = `<h3>${countdown} days to go!</h3>
+                                <br>
+                                <strong>Country information:</strong>
+                                <br>
+                                The counrty you want to visit is ${data.name}, and the capital destination there is ${data.capital}. ${data.name} is located in ${data.region} region, and the population is estimated at ${data.population} people. The main language in ${data.name} is ${data.language} language, and ${data.currency} is the official currency of ${data.name}. ${data.timezone} is the time zone used in ${data.name}.`;
+            document.getElementById('countryInfo').innerHTML = countryInfo;
+            localStorage.setItem('countryInfo', countryInfo);
+        });
+
     getData('/pix')
-    .then((data)=>{
-        const content = `<img src=${data.hits[0].webformatURL} alt=${destination}>
-                        <br>
-                        <div id="caption">${destination}</div>`;
-        document.getElementById('content').innerHTML = content;
-        localStorage.setItem('content',content);
-    })
-    .catch((error)=>{
-        console.log(error);
-        const content = `<div class="alert alert-danger" role="alert">
-        No appropriate image is found!
-      </div>`;
-        document.getElementById('content').innerHTML = content;
-        localStorage.setItem('content',content);
-    });
+        .then((data) => {
+            const content = `<img src=${data.hits[0].webformatURL} alt=${destination}>
+                            <br>
+                            <div id="caption">${destination}</div>`;
+            document.getElementById('content').innerHTML = content;
+            localStorage.setItem('content', content);
+        })
+        .catch((error) => {
+            console.log(error);
+            const content = `<div class="alert alert-danger" role="alert">No appropriate image is found!</div>`;
+            document.getElementById('content').innerHTML = content;
+            localStorage.setItem('content', content);
+        });
 
 }
 
-
-export const subtractDates = (dateOne,dateTwo) => {
-    const d1 = Date.parse(dateOne);
-    const d2 = Date.parse(dateTwo);
-  
-    const difference = d2 - d1;
-  
-    const result = Math.ceil(difference / 86400000);
-    return result;
-}
-
-
-export const getFromCountryAPI = async (countData) => { //
-    const country = countData.country;
-
-    const request = await fetch(countriesAPI+country);
-    try{
-        const newData = await request.json();
-        return newData;
-    }catch(error){
-        console.log(error);
-    }
-}
-
+// update User Interface according to tha data stored in Local Storage
 export const getFromLocalStorage = () => {
     document.getElementById('temp').innerHTML = localStorage.getItem('temp');
     document.getElementById('duration').innerHTML = localStorage.getItem('duration');
@@ -239,22 +242,51 @@ export const getFromLocalStorage = () => {
     document.getElementById('countryInfo').innerHTML = localStorage.getItem('countryInfo');
 }
 
+// update greeting (h2 element) dynamically according to current time 
 export const greeting = () => {
-    var now= new Date();
-	var hour=now.getHours();
-    var greeting= document.getElementById("greeting");
-    if(hour<12){
-        greeting.innerHTML="Hello,Good morning!";
-    }
-	if(hour>=12){
-        hour=hour-12;
 
-        if(hour<6){
-            greeting.innerHTML="Hello,Good afternoon!";
+    const now = new Date();
+    let hour = now.getHours();
+    const greeting = document.getElementById("greeting");
+
+    if (hour < 12) {
+        greeting.innerHTML = "Hello,Good morning!";
+    }
+    if (hour >= 12) {
+        hour = hour - 12;
+
+        if (hour < 6) {
+            greeting.innerHTML = "Hello,Good afternoon!";
         }
-		
-		if(hour>=6) {
-            greeting.innerHTML="Hello,Good evening!";
+
+        if (hour >= 6) {
+            greeting.innerHTML = "Hello,Good evening!";
         }
     }
+}
+
+/* Helper Functions */
+
+// calculate the remaining days to go to the trip (countdown)
+export const getCountdown = (startDate) => {
+
+    let todayDate = new Date();
+    const day = String(todayDate.getDate()).padStart(2, '0');
+    const month = String(todayDate.getMonth() + 1).padStart(2, '0');
+    const year = todayDate.getFullYear();
+    todayDate = year + '-' + month + '-' + day;
+
+    const daysLeft = subtractDates(todayDate, startDate);
+    return daysLeft;
+}
+
+// calculate the difference between two dates
+export const subtractDates = (dateOne, dateTwo) => {
+    const d1 = Date.parse(dateOne);
+    const d2 = Date.parse(dateTwo);
+
+    const difference = d2 - d1;
+
+    const result = Math.ceil(difference / 86400000);
+    return result;
 }

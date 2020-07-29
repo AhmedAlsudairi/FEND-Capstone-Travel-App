@@ -19,7 +19,6 @@ app.use(cors());
 // Initialize the main project folder
 app.use(express.static('dist'));
 
-
 // Setup Server
 const port = 8000;
 
@@ -30,7 +29,7 @@ app.get('/geo', (req, res) => {
     res.send(geoData);
 });
 
-//POST route
+//POST route geonames data
 app.post('/geo', (req, res) => {
     const newData = req.body;
     const newEntry = {
@@ -44,19 +43,19 @@ app.post('/geo', (req, res) => {
 
 //GET route for weatherbit data
 app.get('/weather', (req, res) => {
-    
+
     res.send(weatherData);
 });
 
 //POST route for weatherbit data
 app.post('/weather', (req, res) => {
     const newData = req.body;
-    weatherData = { ...newData , length: 16};
+    weatherData = { ...newData, length: 16 };
 });
 
 //GET route for pixabay data
 app.get('/pix', (req, res) => {
-    
+
     res.send(pixabayData);
 });
 
@@ -68,7 +67,7 @@ app.post('/pix', (req, res) => {
 
 //GET route for  REST Countries API data
 app.get('/country', (req, res) => {
-    
+
     res.send(countriesAPIData);
 });
 
