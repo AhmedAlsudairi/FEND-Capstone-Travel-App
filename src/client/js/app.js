@@ -202,7 +202,7 @@ export const updateUI = (duration, startDate) => {
               </tr>
               <tr>
                 <th scope="col">Day</th>
-                <th scope="col">Temp</th>
+                <th scope="col">Temperature</th>
               </tr>
             </thead>
             <tbody>`;
@@ -215,7 +215,7 @@ export const updateUI = (duration, startDate) => {
                 if (b >= a) {
                     temp += `<tr>
                             <th scope="row">${counter}</th>
-                            <td>${data[i].temp}C</td>
+                            <td>${data[i].temp}&#8451;</td>
                             </tr> `;
                     if (counter == 5) {
                         temp += ` </tbody>
