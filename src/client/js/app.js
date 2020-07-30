@@ -194,7 +194,18 @@ export const updateUI = (duration, startDate) => {
         .then((data) => {
             let a = new Date(startDate).getTime();
             let counter = 1;
-            let temp = '<strong>Weather forcast:</strong> <br>';
+            let temp = `
+            <table class="table table-striped" style="text-align:center;">
+            <thead>
+              <tr>
+              <th colspan="2"> Weather forcast </th> 
+              </tr>
+              <tr>
+                <th scope="col">Day</th>
+                <th scope="col">Temp</th>
+              </tr>
+            </thead>
+            <tbody>`;
 
             // find the correct date from 16 date forcast array
             for (let i = 0; i < data.length; i++) {
@@ -202,8 +213,13 @@ export const updateUI = (duration, startDate) => {
                 let b = new Date(data[i].datetime).getTime();
 
                 if (b >= a) {
-                    temp += `<span>Day ${counter}:</span> ${data[i].temp}C `;
+                    temp += `<tr>
+                            <th scope="row">${counter}</th>
+                            <td>${data[i].temp}C</td>
+                            </tr> `;
                     if (counter == 5) {
+                        temp += ` </tbody>
+                                </table>`  ;
                         break;
                     }
                     counter++;
