@@ -235,7 +235,7 @@ export const updateUI = (duration, startDate) => {
                                 <br>
                                 <strong>Country information:</strong>
                                 <br>
-                                The counrty you want to visit is ${data.name}, and the capital destination there is ${data.capital}. ${data.name} is located in ${data.region} region, and the population is estimated at ${data.population} people. The main language in ${data.name} is ${data.language} language, and ${data.currency} is the official currency of ${data.name}. ${data.timezone} is the time zone used in ${data.name}.`;
+                                The counrty you want to visit is ${data.name}, and the capital city of ${data.name} is ${data.capital}. ${data.name} is located in ${data.region} region, and the population is estimated at ${data.population} people. The main language in ${data.name} is ${data.language} language, and ${data.currency} is the official currency of ${data.name}. ${data.timezone} is the time zone used in ${data.name}.`;
             document.getElementById('countryInfo').innerHTML = countryInfo;
             localStorage.setItem('countryInfo', countryInfo);
         });
@@ -313,3 +313,20 @@ export const subtractDates = (dateOne, dateTwo) => {
     const result = Math.ceil(difference / 86400000);
     return result;
 }
+
+// event listeners
+export const localStorageListener= window.addEventListener('load', getFromLocalStorage);
+export const greetingListener= window.addEventListener("load", greeting, false);
+
+const print = document.getElementById('print');
+export const printListener= print.addEventListener('click', () => {
+    window.print();
+});
+
+const create = document.getElementById('create');
+export const createListener= create.addEventListener('click', createTrip);
+
+const remove = document.getElementById('remove');
+export const removeListener= remove.addEventListener('click', removeTrip);
+
+
