@@ -1,7 +1,8 @@
 # FEND-Capstone-Travel-App
+## Project overview:
 Travel App is web application that receive trip destenation and dates of the trip from the user, then display weather forcast of the destenation in spacified dates, general information about destenation's country, and image of the destenation.
 
-# Getting started
+## Getting started
 1. use <code>cd</code> to go to the appropriate path.
 2. run <code>npm insatll</code> to install all dependencies.
 ### Start the app
@@ -11,6 +12,7 @@ Travel App is web application that receive trip destenation and dates of the tri
 ### Testing the app
 1. run <code>npm run test</code> to start the jest testnig.
 
+<<<<<<< HEAD
 # External APIs
   *<a target="_blank" href="http://www.geonames.org/export/web-services.html">Geonames</a>
   *<a target="_blank" href="https://www.weatherbit.io/account/create">Weatherbit</a>
@@ -27,4 +29,3 @@ Travel App is web application that receive trip destenation and dates of the tri
   *Sass
   *Jest
   *Service Workers
-
