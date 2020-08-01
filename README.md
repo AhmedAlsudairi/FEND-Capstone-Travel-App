@@ -12,21 +12,19 @@ Travel App is web application that receive trip destenation and dates of the tri
 1. run <code>npm run test</code> to start the jest testnig.
 
 # External APIs
-<ul>
-  <li><a target="_blank" href="http://www.geonames.org/export/web-services.html">Geonames</a></li>
-  <li><a target="_blank" href="https://www.weatherbit.io/account/create">Weatherbit</a></li>
-  <li><a target="_blank" href="https://pixabay.com/api/docs/">Pixabay</a></li>
-  <li><a target="_blank" href="https://restcountries.eu/">REST Countries API</a></li>
-</ul>
+  *<a target="_blank" href="http://www.geonames.org/export/web-services.html">Geonames</a>
+  *<a target="_blank" href="https://www.weatherbit.io/account/create">Weatherbit</a>
+  *<a target="_blank" href="https://pixabay.com/api/docs/">Pixabay</a>
+  *<a target="_blank" href="https://restcountries.eu/">REST Countries API</a>
+
 
 # Used tools and technologies
-<ul>
-  <li>Bootstrap</li>
-  <li>Webpack</li>
-  <li>Bable</li>
-  <li>Node.js</li>
-  <li>Express.js</li>
-  <li>Sass</li>
-  <li>Jest</li>
-  <li>Service Workers</li>
-</ul>
+  *Bootstrap
+  *Webpack
+  *Bable
+  *Node.js
+  *Express.js
+  *Sass
+  *Jest
+  *Service Workers
+
