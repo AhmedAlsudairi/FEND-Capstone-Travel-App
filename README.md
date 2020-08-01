@@ -12,7 +12,7 @@ Travel App is web application that receive trip destenation and dates of the tri
 ### Testing the app
 1. run <code>npm run test</code> to start the jest testnig.
 
-<<<<<<< HEAD
+
 # External APIs
   * <a target="_blank" href="http://www.geonames.org/export/web-services.html">Geonames</a>
   * <a target="_blank" href="https://www.weatherbit.io/account/create">Weatherbit</a>
