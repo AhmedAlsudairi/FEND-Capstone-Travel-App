@@ -313,20 +313,3 @@ export const subtractDates = (dateOne, dateTwo) => {
     const result = Math.ceil(difference / 86400000);
     return result;
 }
-
-// event listeners
-export const localStorageListener= window.addEventListener('load', getFromLocalStorage);
-export const greetingListener= window.addEventListener("load", greeting, false);
-
-const print = document.getElementById('print');
-export const printListener= print.addEventListener('click', () => {
-    window.print();
-});
-
-const create = document.getElementById('create');
-export const createListener= create.addEventListener('click', createTrip);
-
-const remove = document.getElementById('remove');
-export const removeListener= remove.addEventListener('click', removeTrip);
-
-

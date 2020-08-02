@@ -88,3 +88,6 @@ app.post('/country', (req, res) => {
     countriesAPIData = { ...newEntry };
     res.send(countriesAPIData)
 });
+
+
+exports.app = app;
