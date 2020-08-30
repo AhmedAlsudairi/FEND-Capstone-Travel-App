@@ -1,6 +1,6 @@
 # FEND-Capstone-Travel-App
 ## Project overview:
-Travel App is web application that receive trip destenation and dates of the trip from the user, then display weather forcast of the destenation in spacified dates, general information about destenation's country, and image of the destenation.
+Travel App is web application that receive trip destination and dates of the trip from the user, then display weather forecast of the destination in specified dates, general information about destination's country, and image of the destination.
 
 ## Getting started
 1. use <code>cd</code> to go to the appropriate path.
